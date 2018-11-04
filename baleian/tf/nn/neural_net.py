@@ -18,8 +18,8 @@ class NeuralNetwork(metaclass=ABCMeta):
     def add_dense_layer(self, output_size, activation=None, name=None):
         with tf.variable_scope(self._name, NeuralNetwork.__name__):
             self._H = tf.layers.dense(self._H, output_size,
-                                     activation=activation,
-                                     name=name)
+                                      activation=activation,
+                                      name=name)
         self._Y = tf.placeholder(tf.float32, [None, output_size])
         self._pred = self._H
         self._on_layer_generated()

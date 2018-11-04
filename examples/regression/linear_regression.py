@@ -74,7 +74,7 @@ def main():
         pred, cost = model.test(sess, test_x_data, test_y_data)
         for x, y, p in zip(test_x_data, test_y_data, pred):
             print(x, y, p)
-        print("cost: %f" % (cost))
+        print("cost: %f" % cost)
 
 
 if __name__ == "__main__":
