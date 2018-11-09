@@ -1,4 +1,4 @@
-from baleian.tf.nn.linear_regression import *
+from baleian.tf.nn.regression.linear_regression import *
 
 import tensorflow as tf
 import numpy as np
@@ -27,26 +27,27 @@ def main():
     test_x_data = x_data[:5]
     test_y_data = y_data[:5]
 
-    net = LinearRegression(INPUT_SIZE, name="net") \
-        .add_layer(OUTPUT_SIZE, name="output") \
-        .set_learning_rate(LEARNING_RATE)
+    net = LinearRegression(INPUT_SIZE, OUTPUT_SIZE)
+    net.add_hidden_layer(128, name="hidden1")
+    net.set_learning_rate(LEARNING_RATE)
 
     with tf.Session() as sess:
-        sess.run(tf.global_variables_initializer())
-        model = net.session(sess)
+        model = net.session(sess, name="net")
 
         epoch_history = []
         cost_history = []
 
         for epoch in range(TRAINING_EPOCH):
-            cost = model.train(x_data, y_data)
+            model.training(x_data, y_data)
+            cost = model.get_cost(x_data, y_data)
             epoch_history.append(epoch)
             cost_history.append(cost)
 
         plt.plot(epoch_history, cost_history)
         plt.show()
 
-        pred, cost = model.test(test_x_data, test_y_data)
+        pred = model.prediction(test_x_data)
+        cost = model.get_cost(test_x_data, test_y_data)
         for x, y, p in zip(test_x_data, test_y_data, pred):
             print(x, y, p)
         print("cost: %f" % cost)
